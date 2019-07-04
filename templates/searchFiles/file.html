@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search File Names</title>
+</head>
+
+<body>
+    {% spaceless %}
+    <div>
+         {% if code %}
+            {% for line in code %}
+            <pre>{{line}}</pre>
+            {% endfor %}
+        {% else %}
+        <strong>There are no line present.</strong>
+        {% endif %}
+    </div>
+    {% endspaceless %}
+</body>
+
+</html>

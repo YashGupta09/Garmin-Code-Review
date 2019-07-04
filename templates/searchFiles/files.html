@@ -1,0 +1,91 @@
+{% load render_table from django_tables2 %}
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+<head>
+        <title>List of Files</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'FileCode/css/main.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/vendor/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'FileCode/css/main.css' %}">
+    <!--===============================================================================================-->
+</head>
+
+<body>
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100 ver1 m-b-110">
+                    <div class="table100-head">
+                        <table>
+                            <thead>
+                                <tr class="row100 head">
+                                    <th class="cell100 column1">File Content</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="table100-body js-pscroll">
+                        <table>
+                            <tbody>
+
+                                
+                                  <div>
+                                      {% if code %}
+                                          {% for line in code %}
+                                          <tr class="row100 body">
+                                    {% spaceless %}
+                                            <td class="cell100 column1"><pre>{{line}}</pre></td>
+                                     {% endspaceless %}
+                                          {% endfor %}
+                                      {% else %}
+                                      <strong>There are no line present.</strong>
+                                      {% endif %}
+                                  </div>
+                                 
+
+                                </tr>
+                            </tbody>
+                        </table>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--===============================================================================================-->
+    <script src="{% static 'FileList/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+    <script src="{% static 'FileList/vendor/bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'FileList/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
+    <script src="{% static 'FileList/vendor/select2/select2.min.js' %}"></script>
+    <!--===============================================================================================-->
+    <script src="{% static 'FileList/vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script>
+        $('.js-pscroll').each(function () {
+            var ps = new PerfectScrollbar(this);
+
+            $(window).on('resize', function () {
+                ps.update();
+            })
+        });
+    </script>
+    <!--===============================================================================================-->
+    <script src="{% static 'FileList/js/main.js' %}"></script>
+</body>
+
+</html>

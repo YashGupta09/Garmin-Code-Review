@@ -1,0 +1,66 @@
+.col-form-label, .asteriskField {	/* For File label */
+	display: none;
+}
+
+.container-table-config {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 33px 30px;
+	border-radius: 25px;
+	width: 50%;
+	height : 50%;
+}
+
+.config-form-elements {
+	text-align: center;
+	text-decoration: underline;
+}
+
+.config-form-head {
+	font-size: 50px;
+}
+
+.form-textarea {
+	display: inline-block;
+	width: 100%;
+}
+
+textarea {
+	width: 100%;
+	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 6px;
+	color: #696969;
+}
+
+.config-button-div {
+	height: 68px;
+	width: 216px;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.config-save-btn {
+	height: 100%;
+	width: 100%;
+	white-space: nowrap;
+	font-size: 16px;
+	color: #fff;
+	border: 0;
+	border-radius: 34px;
+	cursor: pointer;
+	position: relative;
+	z-index: 0;
+	background: #0d47a1;
+	transition: all .2s ease-out, color .2s ease-out;
+	font-weight: 300;
+	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+}
+
+.config-save-btn:hover {
+	background: black;
+}
+
+.config-save-btn:focus {
+	outline: 0;
+	box-shadow: none;
+}
