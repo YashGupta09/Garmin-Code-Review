@@ -38,16 +38,17 @@ def api(request):
 	return JsonResponse(files, safe=False)
 
 def lineNums(request):
-	doc_id = int(request.POST.get('doc_id'))
-	argu = request.POST.get('argu')
+	doc_id = int(request.GET.get('doc_id'))
+	argu = request.GET.get('argu')
 
-	file_content = esFunctions.mySearch("id", doc_id)[0]['content']
-
-	lineNums = list()
+	contentList = esFunctions.myIdSearch(doc_id)['_source']['content'].split('\n')
+	lineDict = dict()
+	lineDict['numbers'] = list()
 	regex = re.compile(argu, re.IGNORECASE)
 	i = 0
-	for line in file_content:
+
+	for line in contentList:
 		i += 1
 		if regex.search(line) != None:
-			lineNums.append(i)	
-	return JsonResponse(lineNums, safe=False)
+			lineDict['numbers'].append(i)
+	return JsonResponse(lineDict)

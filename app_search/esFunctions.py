@@ -35,3 +35,7 @@ def mySearch(attribute1=None, value1=None, attribute2=None, value2=None):
 	for hits in search_result['hits']['hits']:
 		resultList.append(hits['_source'])
 	return resultList
+
+def myIdSearch(doc_id):
+	search_result = es.search(index="garmin_index", body={"query": {"ids": {"values": [doc_id]}}})
+	return search_result['hits']['hits'][0]
