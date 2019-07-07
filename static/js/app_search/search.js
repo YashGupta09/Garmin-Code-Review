@@ -13,7 +13,6 @@ function loadTable() {
 
 	if (argu.length < 3) {
 		$('#table').bootstrapTable({
-			pagination: true,
 			columns: [{
 				field: 'id',
 				title: 'File Id'
@@ -23,13 +22,15 @@ function loadTable() {
 			}, {
 				field: 'fileName',
 				title: 'File Name'
+			}, {
+				field: 'highlight',
+				title: 'Highlight'
 			}],
 		});
 		$('#table').bootstrapTable('load', _data);
 	}
 	else {
 		$('#table').bootstrapTable({
-			pagination: true,
 			columns: [{
 				field: 'searchTerm',
 				title: 'Search Term'
@@ -62,12 +63,6 @@ function runLinePython(doc_id, argu) {
 		},
 		dataType: 'json',
 		async: false,
-		error: function() {
-			console.log("Could not connect!");
-		},
-		success: function() {
-			console.log("Successful");
-		}
 	}).responseText);
 	lineNums['numbers'].forEach(num => console.log("Line number: " + num));
 };
@@ -86,8 +81,6 @@ function LineFormatter(value, row) {
 };
 
 $(function() {
-	console.log()
-
 	$('#viewfile').click(function() {
 		runLinePython(1, $('input#search1').val())
 	});

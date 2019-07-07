@@ -9,7 +9,7 @@ def printOnTerminal(message):
 def populate():
     printOnTerminal("populate.py called")
 
-    fileList = list()
+    fileList = []
     count = 0
 
     for rootPath in rootPaths:
