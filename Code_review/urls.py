@@ -15,14 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from app_search import views as search_views
 from app_config import views as config_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', search_views.search, name='app_search'),
-    path('config/', config_views.config, name='app_config'),
-    path('populate/', search_views.populate, name='populate'),
-    path('table/', search_views.api, name='table'),
-    path('view/', search_views.lineNums, name='view_file')
+    path('', include('app_search.urls')),
+    path('config/', config_views.config, name='app_config')
 ]

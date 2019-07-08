@@ -1,0 +1,11 @@
+{% extends "app_search/search_base.html" %}
+{% load staticfiles %}
+{% block content %}
+    <!-- Logo -->
+    <img class = "logo"  src="{% static 'images/garmin-logo.png' %}" alt="Garmin">
+    
+    <div>
+        <table id="viewTable" data-classes="table table-striped table-bordered">
+        </table>
+    </div>
+{% endblock content %}

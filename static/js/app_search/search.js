@@ -1,5 +1,29 @@
+var $table = $('#table');
+var $search = $('input#search');
+var $search1 = $('input#search1');
+
+function initTable() {
+	$table.bootstrapTable({
+		columns: [{
+			field: 'id',
+			title: 'File Id'
+		}, {
+			field: 'root',
+			title: 'Path'
+		}, {
+			field: 'fileName',
+			title: 'File Name',
+			formatter: 'linkFormatter'
+		}, {
+			field: 'highlight',
+			title: 'Highlight',
+			formatter: 'linkFormatter'
+		}],
+	});
+};
+
 function loadTable() {
-	var argu = [$('input#search').val(), $('input#search1').val()];
+	var argu = [$search.val(), $search1.val()];
 	var _data = JSON.parse($.ajax({
 		url: '/table/',
 		type: 'GET',
@@ -11,79 +35,25 @@ function loadTable() {
 		async: false
 	}).responseText);
 
-	if (argu.length < 3) {
-		$('#table').bootstrapTable({
-			columns: [{
-				field: 'id',
-				title: 'File Id'
-			}, {
-				field: 'root',
-				title: 'Path'
-			}, {
-				field: 'fileName',
-				title: 'File Name'
-			}, {
-				field: 'highlight',
-				title: 'Highlight'
-			}],
-		});
-		$('#table').bootstrapTable('load', _data);
-	}
-	else {
-		$('#table').bootstrapTable({
-			columns: [{
-				field: 'searchTerm',
-				title: 'Search Term'
-			}, {
-				field: 'root',
-				title: 'Path'
-			}, {
-				field: 'fileName',
-				title: 'File Name'
-			}, {
-				field: 'lineNumber',
-				title: 'Line No',
-				formatter: 'LineFormatter'
-			}, {
-				field: 'codeLine',
-				title: 'Code Line',
-			}],
-		});
-		$('#table').bootstrapTable('load', _data);
-	};
+	initTable()
+
+	//toggle highlight column depending on arguments of 2nd input
+	if ($search1.val() != "")
+		$table.bootstrapTable('showColumn', 'highlight');
+	else
+		$table.bootstrapTable('hideColumn', 'highlight');
+
+	$table.bootstrapTable('load', _data);
 };
 
-function runLinePython(doc_id, argu) {
-	var lineNums = JSON.parse($.ajax({
-		url: '/view/',
-		type: 'GET',
-		data: {
-			'doc_id': doc_id,
-			'argu': argu
-		},
-		dataType: 'json',
-		async: false,
-	}).responseText);
-	lineNums['numbers'].forEach(num => console.log("Line number: " + num));
-};
-
-function nameFormatter(value, row) {
-	return "<a href='/files/displayFilePlain/" + value + "'>Open</a>"
-};
-
-function pathFormatter(value, row) {
-	return "<a href='/files/displayFilePlain/" + value + "'>Copy</a>"
-};
-
-function LineFormatter(value, row) {
-	xx = "<a href='/files/displayFile/" + row.FileID + "'>" + value + "</a>"
-	return xx
+function linkFormatter(value, row) {
+	return "<a href='/view/" + row.id + "/" + $search1.val() + "/'>" + value + "</a>";
 };
 
 $(function() {
-	$('#viewfile').click(function() {
-		runLinePython(1, $('input#search1').val())
-	});
+	//initialize table with no records
+	initTable();
+	$(".no-records-found td").html('No records to display');
 
 	$('#category_form').submit(function(e) {
 		e.preventDefault();

@@ -22,10 +22,12 @@ def convergeDict(files):
 		contentList = []
 		for content in fileTuple[1]['content']: 
 			contentList.append(extractLines(content))
-		fileTuple[0]['highlight'] = contentList
+		fileTuple[0]['highlight'] = []
+		for outList in contentList:
+			for inList in outList:
+				fileTuple[0]['highlight'].append(inList)
 		newFiles.append(fileTuple[0])
-	for files in newFiles:
-		print(files['highlight'])
+	printOnTerminal("Number of files in search result is " + str(len(files)))
 	return newFiles
 
 # Create your views here
@@ -61,18 +63,15 @@ def api(request):
 		files = convergeDict(files)
 	return JsonResponse(files, safe=False)
 
-def lineNums(request):
-	doc_id = int(request.GET.get('doc_id'))
-	argu = request.GET.get('argu')
-
+def view_file(request, doc_id, argu):
 	contentList = esFunctions.myIdSearch(doc_id)['_source']['content'].split('\n')
-	lineDict = {}
-	lineDict['numbers'] = []
+	lineList = []
 	regex = re.compile(argu, re.IGNORECASE)
 	i = 0
 
 	for line in contentList:
 		i += 1
 		if regex.search(line) != None:
-			lineDict['numbers'].append(i)
-	return JsonResponse(lineDict)
+			lineList.append(i)
+	print("Line number are " + str(lineList))
+	return render(request, 'app_search/view_file.html', {'title': 'File View'})
