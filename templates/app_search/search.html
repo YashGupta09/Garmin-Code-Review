@@ -1,9 +1,6 @@
 {% extends "app_search/search_base.html" %}
 {% load staticfiles %}
 {% block content %}
-	<!-- Logo -->
-	<img class = "logo"  src="{% static 'images/garmin-logo.png' %}" alt="Garmin"> 
-
 	<!-- Search Form -->
 	<form id="category_form" autocomplete="off">
 		<div class="inner-form">
@@ -36,3 +33,7 @@
 		</table>
 	</div>
 {% endblock content %}
+
+{% block js_content %}
+	<script src="{% static 'js/app_search/search.js' %}"></script>
+{% endblock js_content %}

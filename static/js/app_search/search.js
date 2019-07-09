@@ -18,7 +18,7 @@ function initTable() {
 			field: 'highlight',
 			title: 'Highlight',
 			formatter: 'linkFormatter'
-		}],
+		}]
 	});
 };
 

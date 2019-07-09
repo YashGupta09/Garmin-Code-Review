@@ -27,7 +27,7 @@ def convergeDict(files):
 			for inList in outList:
 				fileTuple[0]['highlight'].append(inList)
 		newFiles.append(fileTuple[0])
-	printOnTerminal("Number of files in search result is " + str(len(files)))
+	printOnTerminal("app_search/views", "Number of files in search result is " + str(len(files)))
 	return newFiles
 
 # Create your views here
@@ -64,14 +64,19 @@ def api(request):
 	return JsonResponse(files, safe=False)
 
 def view_file(request, doc_id, argu):
-	contentList = esFunctions.myIdSearch(doc_id)['_source']['content'].split('\n')
-	lineList = []
+	search_result = esFunctions.myIdSearch(doc_id)['_source']
+	fileFullPath = search_result['root'] + "\\" + search_result['fileName']
+	contentList = search_result['content'].split('\n')
+	content = []
 	regex = re.compile(argu, re.IGNORECASE)
 	i = 0
 
 	for line in contentList:
 		i += 1
 		if regex.search(line) != None:
-			lineList.append(i)
-	print("Line number are " + str(lineList))
-	return render(request, 'app_search/view_file.html', {'title': 'File View'})
+			content.append({'lineNum': i, 'lineContent': r"<span style='background-color: #98FB98;'>" + ("%r"%line)[1:-1] + r"</span>"})
+			continue
+		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		
+	print(content)
+	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})

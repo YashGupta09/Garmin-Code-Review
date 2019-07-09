@@ -7,20 +7,20 @@ es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 response = requests.get('http://localhost:9200')
 
 def delFromEs(oldDocCount):
-	printOnTerminal("deleting old documents from garmin_index")
+	printOnTerminal("app_search/esFunctions", "deleting old documents from garmin_index")
 	for i in range(oldDocCount):
 		es.delete(index="garmin_index", doc_type="files", id=(i+1))
-	printOnTerminal(str(oldDocCount) + " old documents deleted")
+	printOnTerminal("app_search/esFunctions", str(oldDocCount) + " old documents deleted")
 
 def addToEs(files):
 	oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
 	delFromEs(oldDocCount)
-	printOnTerminal("adding documents to garmin_index")
+	printOnTerminal("app_search/esFunctions", "adding documents to garmin_index")
 	newDocCount = 0
 	for file in files:
 		es.index(index="garmin_index", doc_type="files", id=file['id'], body=file)
 		newDocCount+=1
-	printOnTerminal(str(newDocCount) + " documents added to garmin_index")
+	printOnTerminal("app_search/esFunctions", str(newDocCount) + " documents added to garmin_index")
 
 def mySearch(attribute1=None, value1=None, attribute2=None, value2=None):
 	resultList = []

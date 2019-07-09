@@ -3,11 +3,11 @@ from django.core.files import File as DjangoFile
 from . import esFunctions
 import os
 
-def printOnTerminal(message):
-    print ("[Populate.py]-- " + message + " --")
+def printOnTerminal(fileName, message):
+    print ("[" + str(fileName) + ".py]-- " + message + " --")
 
 def populate():
-    printOnTerminal("populate.py called")
+    printOnTerminal("app_search/populate", "populate.py called")
 
     fileList = []
     count = 0
@@ -24,9 +24,9 @@ def populate():
                     
                     #creating new File object for every file
                     fileList.append({'id': count+1, 'root': root, 'fileName': file, 'content': content})
-                    printOnTerminal("reading " + filePath)        
+                    printOnTerminal("app_search/populate", "reading " + filePath)        
                     count += 1
         
-    printOnTerminal(str(count) + " files found in the root path(s)")
+    printOnTerminal("app_search/populate", str(count) + " files found in the root path(s)")
 
     esFunctions.addToEs(fileList)
