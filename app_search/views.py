@@ -63,19 +63,34 @@ def api(request):
 		files = convergeDict(files)
 	return JsonResponse(files, safe=False)
 
-def view_file(request, doc_id, argu):
+def view_file_argu(request, doc_id, argu):
 	search_result = esFunctions.myIdSearch(doc_id)['_source']
 	fileFullPath = search_result['root'] + "\\" + search_result['fileName']
 	contentList = search_result['content'].split('\n')
 	content = []
-	regex = re.compile(argu, re.IGNORECASE)
 	i = 0
+	
+	regex = re.compile(argu, re.IGNORECASE)
 
 	for line in contentList:
 		i += 1
 		if regex.search(line) != None:
 			content.append({'lineNum': i, 'lineContent': r"<span style='background-color: #98FB98;'>" + ("%r"%line)[1:-1] + r"</span>"})
 			continue
+		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		
+	print(content)
+	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
+
+def view_file(request, doc_id):
+	search_result = esFunctions.myIdSearch(doc_id)['_source']
+	fileFullPath = search_result['root'] + "\\" + search_result['fileName']
+	contentList = search_result['content'].split('\n')
+	content = []
+	i = 0
+
+	for line in contentList:
+		i += 1
 		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
 		
 	print(content)

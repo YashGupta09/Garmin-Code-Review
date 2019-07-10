@@ -47,7 +47,11 @@ function loadTable() {
 };
 
 function linkFormatter(value, row) {
-	return "<a href='/view/" + row.id + "/" + $search1.val() + "/'>" + value + "</a>";
+	var argu = $search1.val();
+	if (argu != "")
+		return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
+	else
+		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
 };
 
 $(function() {
