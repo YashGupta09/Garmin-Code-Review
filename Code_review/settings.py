@@ -131,8 +131,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 CONFIG_FILE_PATH = os.path.join(BASE_DIR, 'app_search/config.py')
-
-path = "C:\\Users\\tyagi\\Desktop\\Language\\Python\\Algorithm\\"
+ROOTDATA_FILE_PATH = os.path.join(BASE_DIR, 'app_search/rootData.py')
 
 ELASTICSEARCH_DSL = {
     'default': {

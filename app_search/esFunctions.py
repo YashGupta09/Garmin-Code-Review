@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+from .rootData import root_data
 from .populate import printOnTerminal
 import requests
 
@@ -22,22 +23,37 @@ def addToEs(files):
 		newDocCount+=1
 	printOnTerminal("app_search/esFunctions", str(newDocCount) + " documents added to garmin_index")
 
-def mySearch(attribute1=None, value1=None, attribute2=None, value2=None):
+def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2=None):
 	resultList = []
 	contentFlag = False
-	#conditions the check the number of arguments
+	pathCount = 0
+	n = len(notRootPaths)
+
+	# building norRootPath part of the query, it's same for every combination of arguments
+	if not notRootPaths:
+		query = '{"query": {"bool": {"must_not": []'
+	else:
+		query = '{"query": {"bool": {"must_not": ['
+		for path in notRootPaths:
+			pathCount += 1
+			if pathCount != n:
+				query += '{"range": {"id": {"gte": ' + str(root_data[path][0]) + ', "lte": ' + str(root_data[path][1]) + '}}},'
+			else:
+				query += '{"range": {"id": {"gte": ' + str(root_data[path][0]) + ', "lte": ' + str(root_data[path][1]) + '}}}]'
+	# conditions to check the number of arguments
 	if attribute1 == None and value1 == None and attribute2 == None and value2 == None:
-		search_result = es.search(index="garmin_index", size=10000, body={})
+		query += '}}}'
 	elif attribute2 == None and value2 == None:
 		if attribute1 != "content":
-			search_result = es.search(index="garmin_index", size=10000, body={"query": {"regexp": {attribute1: value1}}})
+			query += ', "must": {"regexp": {"' + attribute1 + '": "' + value1 + '"}}}}}'
 		else:
-			search_result = es.search(index="garmin_index", size=10000, body={"query": {"regexp": {attribute1: value1}}, "highlight": {"fields": {"content": {}}}})
+			query += ', "must": {"regexp": {"' + attribute1 + '": "' + value1 + '"}}}}, "highlight": {"fields": {"content": {}}}}'
 			contentFlag = True
 	else:
-		search_result = es.search(index="garmin_index", size=10000, body={"query": {"bool": {"must": [{"regexp": {attribute1: value1}}, {"regexp": {attribute2: value2}}]}}, "highlight": {"fields": {"content": {}}}})
+		query += ', "must": [{"regexp": {"' + attribute1 + '": "' + value1 + '"}}, {"regexp": {"' + attribute2 + '": "' + value2 + '"}}]}}, "highlight": {"fields": {"content": {}}}}'
 		contentFlag = True
-	#retrieve data and return it
+	search_result = es.search(index="garmin_index", size=10000, body=query)
+	# retrieve data and return it
 	if contentFlag:
 		for hits in search_result['hits']['hits']:
 			resultList.append((hits['_source'], hits['highlight']))

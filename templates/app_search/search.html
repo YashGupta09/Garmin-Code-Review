@@ -1,5 +1,10 @@
 {% extends "app_search/search_base.html" %}
 {% load staticfiles %}
+{% block css_content %}
+	<link rel="stylesheet" href="{% static 'css/app_search/bootstrap-multiselect.css' %}" type="text/css"/>
+	<link rel="stylesheet" href="{% static 'css/app_search/search.css' %}" />
+{% endblock css_content %}
+
 {% block content %}
 	<!-- Search Form -->
 	<form id="category_form" autocomplete="off">
@@ -32,8 +37,15 @@
 		style="background-color: #f8f9faed;">
 		</table>
 	</div>
+
+	<select id="rootDropdown" multiple>
+			{% for rootPath in rootPaths %}
+				<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
+			{% endfor %}
+	</select>
 {% endblock content %}
 
 {% block js_content %}
+	<script type="text/javascript" src="{% static 'js/app_search/bootstrap-multiselect.js' %}"></script>
 	<script src="{% static 'js/app_search/search.js' %}"></script>
 {% endblock js_content %}

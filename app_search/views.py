@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 from . import esFunctions
+from .config import paths as rootPaths
 from .populate import populate as popFunc, printOnTerminal
 from .forms import SearchForm
 import re
@@ -38,26 +39,27 @@ def populate(request):
 
 def search(request):
 	form = SearchForm()
-	return render(request, 'app_search/search.html', {'form': form})
+	return render(request, 'app_search/search.html', {'form': form, 'rootPaths': rootPaths})
 
 def api(request):
 	fileName = request.GET.get('fileName')
 	content = request.GET.get('content')
+	notRootPaths = request.GET.getlist('notRootPaths[]')
 	fileNameRegEx = ".*" + fileName + ".*"
 	contentRegEx = ".*" + content + ".*"
 	contentFlag = False
 
 	if fileName:
 		if content:
-			files = esFunctions.mySearch("fileName", fileNameRegEx, "content", contentRegEx)
+			files = esFunctions.mySearch(notRootPaths, "fileName", fileNameRegEx, "content", contentRegEx)
 			contentFlag = True
 		else:
-			files = esFunctions.mySearch("fileName", fileNameRegEx)
+			files = esFunctions.mySearch(notRootPaths, "fileName", fileNameRegEx)
 	elif content:
-		files = esFunctions.mySearch("content", contentRegEx)
+		files = esFunctions.mySearch(notRootPaths, "content", contentRegEx)
 		contentFlag = True
 	else:
-		files = esFunctions.mySearch()
+		files = esFunctions.mySearch(notRootPaths)
 
 	if contentFlag:
 		files = convergeDict(files)
@@ -79,7 +81,6 @@ def view_file_argu(request, doc_id, argu):
 			continue
 		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
 		
-	print(content)
 	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
 
 def view_file(request, doc_id):
@@ -93,5 +94,4 @@ def view_file(request, doc_id):
 		i += 1
 		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
 		
-	print(content)
 	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})

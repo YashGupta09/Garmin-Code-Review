@@ -1,6 +1,7 @@
 var $table = $('#table');
 var $search = $('input#search');
 var $search1 = $('input#search1');
+var $rootDropdown = $('#rootDropdown');
 
 function initTable() {
 	$table.bootstrapTable({
@@ -23,13 +24,14 @@ function initTable() {
 };
 
 function loadTable() {
-	var argu = [$search.val(), $search1.val()];
+	var notRootPaths = notSelectedOptions();
 	var _data = JSON.parse($.ajax({
 		url: '/table/',
 		type: 'GET',
 		data: {
-			'fileName': argu[0],
-			'content': argu[1]
+			'fileName': $search.val(),
+			'content': $search1.val(),
+			'notRootPaths': notRootPaths
 		},
 		dataType: 'json',
 		async: false
@@ -37,7 +39,7 @@ function loadTable() {
 
 	initTable()
 
-	//toggle highlight column depending on arguments of 2nd input
+	//toggle show/hide highlight column depending on arguments of 2nd input
 	if ($search1.val() != "")
 		$table.bootstrapTable('showColumn', 'highlight');
 	else
@@ -54,7 +56,24 @@ function linkFormatter(value, row) {
 		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
 };
 
+function notSelectedOptions() {
+	var notRootPaths = new Array();
+	var selectedRootPaths = $rootDropdown.val();
+	$.map($("#rootDropdown option") ,function(option) {
+		if (!selectedRootPaths.includes(option.value))
+			notRootPaths.push(option.value);
+	});
+	return notRootPaths;
+};
+
 $(function() {
+	$('#rootDropdown').multiselect({
+		includeSelectAllOption: true,
+		disableIfEmpty: true,
+		nonSelectedText: 'Select root path(s)',
+		numberDisplayed: 1
+	});
+
 	//initialize table with no records
 	initTable();
 	$(".no-records-found td").html('No records to display');
