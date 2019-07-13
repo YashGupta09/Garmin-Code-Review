@@ -17,7 +17,7 @@ def convergeDict(files):
 				newHighlightList.append(line.replace('<em>', '').replace('</em>', ''))
 		return newHighlightList
 
-	# Function body begins here
+	# convergeDict() body begins here
 	newFiles = []
 	for fileTuple in files:
 		contentList = []
@@ -46,17 +46,16 @@ def api(request):
 	content = request.GET.get('content')
 	notRootPaths = request.GET.getlist('notRootPaths[]')
 	fileNameRegEx = ".*" + fileName + ".*"
-	contentRegEx = ".*" + content + ".*"
 	contentFlag = False
 
 	if fileName:
 		if content:
-			files = esFunctions.mySearch(notRootPaths, "fileName", fileNameRegEx, "content", contentRegEx)
+			files = esFunctions.mySearch(notRootPaths, "fileName", fileNameRegEx, "content", content)
 			contentFlag = True
 		else:
 			files = esFunctions.mySearch(notRootPaths, "fileName", fileNameRegEx)
 	elif content:
-		files = esFunctions.mySearch(notRootPaths, "content", contentRegEx)
+		files = esFunctions.mySearch(notRootPaths, "content", content)
 		contentFlag = True
 	else:
 		files = esFunctions.mySearch(notRootPaths)
@@ -65,21 +64,28 @@ def api(request):
 		files = convergeDict(files)
 	return JsonResponse(files, safe=False)
 
-def view_file_argu(request, doc_id, argu):
+def view_file_argu(request, doc_id, arguString):
 	search_result = esFunctions.myIdSearch(doc_id)['_source']
 	fileFullPath = search_result['root'] + "\\" + search_result['fileName']
 	contentList = search_result['content'].split('\n')
 	content = []
 	i = 0
 	
-	regex = re.compile(argu, re.IGNORECASE)
+	regexes = []
+	argus = arguString.split(' ')
+	for argu in argus:
+		regexes.append(re.compile(argu, re.IGNORECASE))
 
 	for line in contentList:
 		i += 1
-		if regex.search(line) != None:
-			content.append({'lineNum': i, 'lineContent': r"<span style='background-color: #98FB98;'>" + ("%r"%line)[1:-1] + r"</span>"})
-			continue
-		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		highlightFlag = False
+		for regex in regexes:
+			if regex.search(line) != None:
+				content.append({'lineNum': i, 'lineContent': r"<span style='background-color: #98FB98;'>" + ("%r"%line)[1:-1] + r"</span>"})
+				highlightFlag = True
+				break
+		if not highlightFlag: content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		else: continue
 		
 	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
 

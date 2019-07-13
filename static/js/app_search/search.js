@@ -59,6 +59,8 @@ function linkFormatter(value, row) {
 function notSelectedOptions() {
 	var notRootPaths = new Array();
 	var selectedRootPaths = $rootDropdown.val();
+	if (!selectedRootPaths.length)
+		return notRootPaths;
 	$.map($("#rootDropdown option") ,function(option) {
 		if (!selectedRootPaths.includes(option.value))
 			notRootPaths.push(option.value);

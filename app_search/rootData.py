@@ -1,1 +1,1 @@
-root_data = {r'C:\Users\gupta\OneDrive\Desktop\calculator-master': [1, 131], }
+root_data = {r'C:\Users\gupta\OneDrive\Desktop\Garmin\My Code\test_folder': [1, 7], }
