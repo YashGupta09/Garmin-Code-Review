@@ -21,10 +21,15 @@
                     title: 'Line No.'
                 }, {
                     field: 'lineContent',
-                    title: 'Code'
+                    title: 'Code',
+                    formatter: 'codeLineFormatter'
                 }]
             });
         };
+
+        function codeLineFormatter(value, row) {
+            return "<pre>" + value + "</pre>";
+        }
 
         $(function() {
             initTable();

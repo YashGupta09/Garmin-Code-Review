@@ -84,7 +84,7 @@ def view_file_argu(request, doc_id, arguString):
 				content.append({'lineNum': i, 'lineContent': r"<span style='background-color: #98FB98;'>" + ("%r"%line)[1:-1] + r"</span>"})
 				highlightFlag = True
 				break
-		if not highlightFlag: content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		if not highlightFlag: content.append({'lineNum': i, 'lineContent': line})
 		else: continue
 		
 	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
@@ -98,6 +98,6 @@ def view_file(request, doc_id):
 
 	for line in contentList:
 		i += 1
-		content.append({'lineNum': i, 'lineContent': ("%r"%line)[1:-1]})
+		content.append({'lineNum': i, 'lineContent': line})
 		
 	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
