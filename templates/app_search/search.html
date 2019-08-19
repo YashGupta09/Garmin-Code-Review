@@ -15,12 +15,13 @@
 	<form class="form"id="category_form" autocomplete="off">
 	  <div class="row align-items-center justify-content-around">
 		<div class="col-md-3">
-			<select id="rootDropdown" class = "selectpicker"  multiple data-live-search="true" >
+			<select id="rootDropdown" class="selectpicker" multiple data-live-search="true" >
 				{% for rootPath in rootPaths %}
 					<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
 				{% endfor %}
 			</select>
-			</div>
+		</div>
+
 		{% for field in form %}
 		<div class="col-md-3 pt-3">
 		  <div class="form-group ">
@@ -30,16 +31,12 @@
 		{% endfor %}
 
 		<div class="col-md-1">
-				<button type="Submit" class="btn btn-primary btn-block apply">
-				  <i class="fas fa-search"></i>
-				</button>
-			  </div>
-
-</div>
-		
+			<button type="Submit" class="btn btn-primary btn-block apply">
+				<i class="fas fa-search"></i>
+			</button>
+		</div>
 	  </div>
 	</form>
-
 		<table id="table" 
 		data-toggle="table" data-pagination="true" data-search="true" 
     sidePagination='server' data-show-refresh="true"
@@ -101,66 +98,66 @@ function initTable() {
 	});
 };
 initTable()
-// function loadTable() {
-// 	var notRootPaths = notSelectedOptions();
-// 	var _data = JSON.parse($.ajax({
-// 		url: '/table/',
-// 		type: 'GET',
-// 		data: {
-// 			'fileName': $search.val(),
-// 			'content': $search1.val(),
-// 			'notRootPaths': notRootPaths
-// 		},
-// 		dataType: 'json',
-// 		async: false
-// 	}).responseText);
+function loadTable() {
+	var notRootPaths = notSelectedOptions();
+	var _data = JSON.parse($.ajax({
+		url: '/table/',
+		type: 'GET',
+		data: {
+			'fileName': $search.val(),
+			'content': $search1.val(),
+			'notRootPaths': notRootPaths
+		},
+		dataType: 'json',
+		async: false
+	}).responseText);
 
 
-// 	//toggle show/hide highlight column depending on arguments of 2nd input
-// 	if ($search1.val() != "")
-// 		$table.bootstrapTable('showColumn', 'highlight');
-// 	else
-// 		$table.bootstrapTable('hideColumn', 'highlight');
+	//toggle show/hide highlight column depending on arguments of 2nd input
+	if ($search1.val() != "")
+		$table.bootstrapTable('showColumn', 'highlight');
+	else
+		$table.bootstrapTable('hideColumn', 'highlight');
 
-// 	$table.bootstrapTable('load', _data);
-// };
+	$table.bootstrapTable('load', _data);
+};
 
-// function linkFormatter(value, row) {
-// 	var argu = $search1.val();
-// 	if (argu != "")
-// 		return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
-// 	else
-// 		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
-// };
+function linkFormatter(value, row) {
+	var argu = $search1.val();
+	if (argu != "")
+		return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
+	else
+		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
+};
 
-// function notSelectedOptions() {
-// 	var notRootPaths = new Array();
-// 	var selectedRootPaths = $rootDropdown.val();
-// 	if (!selectedRootPaths.length)
-// 		return notRootPaths;
-// 	$.map($("#rootDropdown option") ,function(option) {
-// 		if (!selectedRootPaths.includes(option.value))
-// 			notRootPaths.push(option.value);
-// 	});
-// 	return notRootPaths;
-// };
+function notSelectedOptions() {
+	var notRootPaths = new Array();
+	var selectedRootPaths = $rootDropdown.val();
+	if (!selectedRootPaths.length)
+		return notRootPaths;
+	$.map($("#rootDropdown option") ,function(option) {
+		if (!selectedRootPaths.includes(option.value))
+			notRootPaths.push(option.value);
+	});
+	return notRootPaths;
+};
 
-// $(function() {
-// 	$('#rootDropdown').multiselect({
-// 		includeSelectAllOption: true,
-// 		disableIfEmpty: true,
-// 		nonSelectedText: 'Select root path(s)',
-// 		numberDisplayed: 1
-// 	});
+$(function() {
+	// $('#rootDropdown').multiselect({
+	// 	includeSelectAllOption: true,
+	// 	disableIfEmpty: true,
+	// 	nonSelectedText: 'Select root path(s)',
+	// 	numberDisplayed: 1
+	// });
 
-// 	//initialize table with no records
-// 	initTable();
-// 	$(".no-records-found td").html('No records to display');
+	//initialize table with no records
+	initTable();
+	$(".no-records-found td").html('No records to display');
 
-// 	$('#category_form').submit(function(e) {
-// 		e.preventDefault();
-// 		loadTable();
-// 	});
-// });
+	$('#category_form').submit(function(e) {
+		e.preventDefault();
+		loadTable();
+	});
+});
 </script>
 {% endblock jscontent %}

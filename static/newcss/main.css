@@ -349,6 +349,10 @@ a.article:hover {
     -5px -5px 30px 15px rgba(0, 0, 0, 0.22);
 }
 
+.loading-wrap {
+  display: none;
+}
+
 textarea.form-control {
   min-height: 20vh;
 }
