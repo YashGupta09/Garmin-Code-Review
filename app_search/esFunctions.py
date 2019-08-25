@@ -14,8 +14,8 @@ def delFromEs(oldDocCount):
 	printOnTerminal("app_search/esFunctions", str(oldDocCount) + " old documents deleted")
 
 def addToEs(files):
-	oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
-	delFromEs(oldDocCount)
+	# oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
+	# delFromEs(oldDocCount)
 	printOnTerminal("app_search/esFunctions", "adding documents to garmin_index")
 	newDocCount = 0
 	for file in files:
