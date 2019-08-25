@@ -1,7 +1,7 @@
 {% extends "app_search/search_base.html" %}
 {% load staticfiles %}
 
-{% block head_add %} 
+{% block head_add %}
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
@@ -11,51 +11,54 @@
 {% endblock %}
 {% block content %}
 
-<div class="container-fluid bg-light ">
-	<form class="form"id="category_form" autocomplete="off">
-	  <div class="row align-items-center justify-content-around">
-		<div class="col-md-3">
-			<select id="rootDropdown" class="selectpicker" multiple data-live-search="true" >
-				{% for rootPath in rootPaths %}
-					<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
+<div class="container-fluid bg-lightforsearch  ">
+	<div class="d-flex justify-content-center ">
+		<form class="form" id="category_form" autocomplete="off"
+			style="background: #007bff; border-radius: 30px; margin: 20px 0px; padding:5px">
+
+			<div class="row align-items-center justify-content-around">
+					<div class="col-sm"></div>
+				<div class="col-sm">
+					<select id="rootDropdown" class="selectpicker" multiple data-live-search="true">
+						{% for rootPath in rootPaths %}
+						<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				{% for field in form %}
+				<div class="col-sm" >
+						{{ field }}
+				</div>
 				{% endfor %}
-			</select>
-		</div>
 
-		{% for field in form %}
-		<div class="col-md-3 pt-3">
-		  <div class="form-group ">
-			{{ field }}
-		  </div>
-		</div>
-		{% endfor %}
+				<div class="col-sm">
+					<button type="Submit" class="btn">
+							<i class="fas fa-search fa-2x"></i>
+					</button>
+				</div>
+				<div class="col-sm"></div>
+			</div>
 
-		<div class="col-md-1">
-			<button type="Submit" class="btn btn-primary btn-block apply">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
-	  </div>
-	</form>
+		</form>
+	</div>
 
-  </div>
+</div>
 
-  <table id="table" 
-  data-toggle="table" data-pagination="true" data-search="true" 
-sidePagination='server' data-show-refresh="true"
-data-smart-display="true">
-  </table>
+<table id="table" data-toggle="table" data-search="true" sidePagination='server'
+	data-show-refresh="true" data-smart-display="true" style="background: #f8f9fa">
+</table>
 
 
 
-	<!-- Float Buttons -->
-	<!-- <div class="float-link-div">
+<!-- Float Buttons -->
+<!-- <div class="float-link-div">
 		<a class="float-link float-link-gap" href="{% url 'populate' %}">Populate</a>
 		<a class="float-link" href="{% url 'app_config' %}">Edit Config</a>
 	</div> -->
 
-	<!-- Table -->
-	<!-- <div>
+<!-- Table -->
+<!-- <div>
 		<table id="table" data-cache="false" data-pagination="true" data-page-size="25"
 		data-search="true" data-show-toggle="true" data-buttons-align="left" data-height="60%"
 		data-classes= "table table-striped table-bordered table-hover"
@@ -63,8 +66,8 @@ data-smart-display="true">
 		</table>
 	</div> -->
 
-	<!-- Multiselect Dropdown Root Path Menu -->
-	<!-- <select id="rootDropdown" multiple>
+<!-- Multiselect Dropdown Root Path Menu -->
+<!-- <select id="rootDropdown" multiple>
 			{% for rootPath in rootPaths %}
 				<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
 			{% endfor %}
@@ -72,94 +75,94 @@ data-smart-display="true">
 {% endblock content %}
 
 {% block jscontent %}
-	
+
 <!-- <script type="text/javascript" src="{% static 'js/app_search/bootstrap-multiselect.js' %}"></script> -->
 <script>
-var $table = $('#table');
-var $search = $('#search');
-var $search1 = $('#search1');
-var $rootDropdown = $('#rootDropdown');
-console.log($search1)
-function initTable() {
-	$table.bootstrapTable({
-		columns: [{
-			field: 'id',
-			title: 'File Id'
-		}, {
-			field: 'root',
-			title: 'Path'
-		}, {
-			field: 'fileName',
-			title: 'File Name',
-			formatter: 'linkFormatter'
-		}, {
-			field: 'highlight',
-			title: 'Highlight',
-			formatter: 'linkFormatter'
-		}]
-	});
-};
-initTable()
-function loadTable() {
-	var notRootPaths = notSelectedOptions();
-	var _data = JSON.parse($.ajax({
-		url: '/table/',
-		type: 'GET',
-		data: {
-			'fileName': $search.val(),
-			'content': $search1.val(),
-			'notRootPaths': notRootPaths
-		},
-		dataType: 'json',
-		async: false
-	}).responseText);
+	var $table = $('#table');
+	var $search = $('#search');
+	var $search1 = $('#search1');
+	var $rootDropdown = $('#rootDropdown');
+	console.log($search1)
+	function initTable() {
+		$table.bootstrapTable({
+			columns: [{
+				field: 'id',
+				title: 'File Id'
+			}, {
+				field: 'root',
+				title: 'Path'
+			}, {
+				field: 'fileName',
+				title: 'File Name',
+				formatter: 'linkFormatter'
+			}, {
+				field: 'highlight',
+				title: 'Highlight',
+				formatter: 'linkFormatter'
+			}]
+		});
+	};
+	initTable()
+	function loadTable() {
+		var notRootPaths = notSelectedOptions();
+		var _data = JSON.parse($.ajax({
+			url: '/table/',
+			type: 'GET',
+			data: {
+				'fileName': $search.val(),
+				'content': $search1.val(),
+				'notRootPaths': notRootPaths
+			},
+			dataType: 'json',
+			async: false
+		}).responseText);
 
 
-	//toggle show/hide highlight column depending on arguments of 2nd input
-	if ($search1.val() != "")
-		$table.bootstrapTable('showColumn', 'highlight');
-	else
-		$table.bootstrapTable('hideColumn', 'highlight');
+		//toggle show/hide highlight column depending on arguments of 2nd input
+		if ($search1.val() != "")
+			$table.bootstrapTable('showColumn', 'highlight');
+		else
+			$table.bootstrapTable('hideColumn', 'highlight');
 
-	$table.bootstrapTable('load', _data);
-};
+		$table.bootstrapTable('load', _data);
+	};
 
-function linkFormatter(value, row) {
-	var argu = $search1.val();
-	if (argu != "")
-		return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
-	else
-		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
-};
+	function linkFormatter(value, row) {
+		var argu = $search1.val();
+		if (argu != "")
+			return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
+		else
+			return "<a href='/view/" + row.id + "/'>" + value + "</a>";
+	};
 
-function notSelectedOptions() {
-	var notRootPaths = new Array();
-	var selectedRootPaths = $rootDropdown.val();
-	if (!selectedRootPaths.length)
+	function notSelectedOptions() {
+		var notRootPaths = new Array();
+		var selectedRootPaths = $rootDropdown.val();
+		if (!selectedRootPaths.length)
+			return notRootPaths;
+		$.map($("#rootDropdown option"), function (option) {
+			if (!selectedRootPaths.includes(option.value))
+				notRootPaths.push(option.value);
+		});
 		return notRootPaths;
-	$.map($("#rootDropdown option") ,function(option) {
-		if (!selectedRootPaths.includes(option.value))
-			notRootPaths.push(option.value);
+	};
+
+	$(function () {
+		// $('#rootDropdown').multiselect({
+		// 	includeSelectAllOption: true,
+		// 	disableIfEmpty: true,
+		// 	nonSelectedText: 'Select root path(s)',
+		// 	numberDisplayed: 1
+		// });
+
+		//initialize table with no records
+		initTable();
+		$(".no-records-found td").html('No records to display');
+
+		$('#category_form').submit(function (e) {
+			e.preventDefault();
+			loadTable();
+		});
 	});
-	return notRootPaths;
-};
-
-$(function() {
-	// $('#rootDropdown').multiselect({
-	// 	includeSelectAllOption: true,
-	// 	disableIfEmpty: true,
-	// 	nonSelectedText: 'Select root path(s)',
-	// 	numberDisplayed: 1
-	// });
-
-	//initialize table with no records
-	initTable();
-	$(".no-records-found td").html('No records to display');
-
-	$('#category_form').submit(function(e) {
-		e.preventDefault();
-		loadTable();
-	});
-});
 </script>
 {% endblock jscontent %}
