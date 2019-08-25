@@ -36,7 +36,7 @@ def populate():
                 #fileComp stores the components of file, ie, filename and extention
                 fileComp = os.path.splitext(file)
                 if fileComp[1] in ext:
-                    filePath = root + '\\' + file
+                    filePath = root + '/' + file
                     with open(filePath, mode='r', encoding='utf8') as f:
                         content = DjangoFile(f).read()
                     #creating new File object for every file

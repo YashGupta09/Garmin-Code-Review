@@ -63,7 +63,7 @@
         </nav>
 
         <div class="container" style="padding-left: 10%; min-width: 90%;">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color: #007bff">
                         <i class="fas fa-align-left"></i>
@@ -75,7 +75,7 @@
                         <i class="fas fa-align-justify"></i>
                     </button>
                 </div>
-            </nav>
+            </nav> -->
 
             {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
@@ -84,7 +84,9 @@
                 </button>
                 {{ message }}
             </div>
-            {% endfor %} {% block content %} {% endblock %}
+            {% endfor %} 
+            {% block content %} 
+            {% endblock %}
         </div>
     </div>
     <script type="text/javascript">
