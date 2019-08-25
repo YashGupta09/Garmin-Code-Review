@@ -2,23 +2,26 @@
 {% load staticfiles %}
 {% block content %}
     <div>
-        <table id="viewTable" data-classes="table table-striped table-bordered"
-        style="background-color: #f8f9faed;">
-            <caption><h1>{{ fullFilePath }}</h1></caption>
+        <table id="viewTable" data-classes="table table-bordered"
+        style="background-color: white;">
+            <h4>{{ fullFilePath }}</h4>
         </table>
     </div>
 {% endblock content %}
 
-{% block js_content %}
+    {% block jscontent %}
+
     <script>
         var $table = $('#viewTable');
+        console.log("ss")
         var contentList = {{ content|safe }};
-
+        console.log("ss")
         function initTable() {
             $table.bootstrapTable({
                 columns: [{
                     field: 'lineNum',
-                    title: 'Line No.'
+                    title: 'Line No.',
+                    align: 'center',
                 }, {
                     field: 'lineContent',
                     title: 'Code',
@@ -33,7 +36,8 @@
 
         $(function() {
             initTable();
+            console.log("ss")
             $table.bootstrapTable('load', contentList);
         });
     </script>
-{% endblock js_content %}
+{% endblock jscontent %}

@@ -86,12 +86,12 @@ def view_file_argu(request, doc_id, arguString):
 				break
 		if not highlightFlag: content.append({'lineNum': i, 'lineContent': line})
 		else: continue
-		
+	print(fileFullPath)	
 	return render(request, 'app_search/view_file.html', {'title': 'Garmin File Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})
 
 def view_file(request, doc_id):
 	search_result = esFunctions.myIdSearch(doc_id)['_source']
-	fileFullPath = search_result['root'] + "\\" + search_result['fileName']
+	fileFullPath = search_result['root'] + "/" + search_result['fileName']
 	contentList = search_result['content'].split('\n')
 	content = []
 	i = 0
@@ -99,5 +99,5 @@ def view_file(request, doc_id):
 	for line in contentList:
 		i += 1
 		content.append({'lineNum': i, 'lineContent': line})
-		
+	print(content)	
 	return render(request, 'app_search/view_file.html', {'title': 'Garmin FIle Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})

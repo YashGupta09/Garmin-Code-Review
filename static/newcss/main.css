@@ -109,9 +109,7 @@ span {
   background-color: #f8f9faad;
 }
 
-button[type=button]{
-    background-color: white;
-}
+
 .modalDialog {
   position: fixed;
   font-family: Arial, Helvetica, sans-serif;
@@ -320,9 +318,7 @@ a.article:hover {
   max-width: 90%;
   width: auto !important;
 }
-.apply {
-  width: auto;
-}
+
 .swal-wide{
   width:50% !important;
 }
@@ -413,4 +409,11 @@ select {
   #sidebarCollapse span {
     display: none;
   }
+}
+
+pre{
+  margin : 0px !important;
+}
+td{
+  padding: 1px 5px !important;
 }
