@@ -39,7 +39,7 @@ def populate(request):
 
 def search(request):
 	form = SearchForm()
-	return render(request, 'app_search/search.html', {'form': form, 'rootPaths': rootPaths})
+	return render(request, 'app_search/search.html', {'title': 'Garmin File Search', 'form': form, 'rootPaths': rootPaths})
 
 def api(request):
 	fileName = request.GET.get('fileName')
@@ -87,7 +87,7 @@ def view_file_argu(request, doc_id, arguString):
 		if not highlightFlag: content.append({'lineNum': i, 'lineContent': line})
 		else: continue
 		
-	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
+	return render(request, 'app_search/view_file.html', {'title': 'Garmin File Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})
 
 def view_file(request, doc_id):
 	search_result = esFunctions.myIdSearch(doc_id)['_source']
@@ -95,9 +95,9 @@ def view_file(request, doc_id):
 	contentList = search_result['content'].split('\n')
 	content = []
 	i = 0
-
+	
 	for line in contentList:
 		i += 1
 		content.append({'lineNum': i, 'lineContent': line})
 		
-	return render(request, 'app_search/view_file.html', {'title': 'File View', 'fullFilePath': fileFullPath , 'content': content})
+	return render(request, 'app_search/view_file.html', {'title': 'Garmin FIle Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})
