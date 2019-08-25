@@ -45,7 +45,6 @@
 
 </div>
 
-<<<<<<< HEAD
 <table id="table" data-toggle="table" data-search="true" sidePagination='server'
 	data-show-refresh="true" data-smart-display="true" style="background: #f8f9fa">
 </table>
@@ -73,20 +72,13 @@
 				<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
 			{% endfor %}
 	</select> -->
-=======
-  <table id="table" 
-  data-toggle="table" data-pagination="true" data-search="true" 
-sidePagination='server' data-show-refresh="true"
-data-smart-display="true">
-  </table>
->>>>>>> 4526b0a7577123c884067c5bf7c9b93ae5e94001
+
 {% endblock content %}
 
 {% block jscontent %}
 
 <!-- <script type="text/javascript" src="{% static 'js/app_search/bootstrap-multiselect.js' %}"></script> -->
 <script>
-<<<<<<< HEAD
 	var $table = $('#table');
 	var $search = $('#search');
 	var $search1 = $('#search1');
@@ -172,85 +164,7 @@ data-smart-display="true">
 			e.preventDefault();
 			loadTable();
 		});
-=======
-var $table = $('#table');
-var $search = $('#search');
-var $search1 = $('#search1');
-var $rootDropdown = $('#rootDropdown');
-console.log($search1)
-function initTable() {
-	$table.bootstrapTable({
-		columns: [{
-			field: 'id',
-			title: 'File Id'
-		}, {
-			field: 'root',
-			title: 'Path'
-		}, {
-			field: 'fileName',
-			title: 'File Name',
-			formatter: 'linkFormatter'
-		}, {
-			field: 'highlight',
-			title: 'Highlight',
-			formatter: 'linkFormatter'
-		}]
-	});
-};
-initTable()
-function loadTable() {
-	var notRootPaths = notSelectedOptions();
-	var _data = JSON.parse($.ajax({
-		url: '/table/',
-		type: 'GET',
-		data: {
-			'fileName': $search.val(),
-			'content': $search1.val(),
-			'notRootPaths': notRootPaths
-		},
-		dataType: 'json',
-		async: false
-	}).responseText);
 
-
-	//toggle show/hide highlight column depending on arguments of 2nd input
-	if ($search1.val() != "")
-		$table.bootstrapTable('showColumn', 'highlight');
-	else
-		$table.bootstrapTable('hideColumn', 'highlight');
-
-	$table.bootstrapTable('load', _data);
-};
-
-function linkFormatter(value, row) {
-	var argu = $search1.val();
-	if (argu != "")
-		return "<a href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
-	else
-		return "<a href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
-};
-
-function notSelectedOptions() {
-	var notRootPaths = new Array();
-	var selectedRootPaths = $rootDropdown.val();
-	if (!selectedRootPaths.length)
-		return notRootPaths;
-	$.map($("#rootDropdown option") ,function(option) {
-		if (!selectedRootPaths.includes(option.value))
-			notRootPaths.push(option.value);
-	});
-	return notRootPaths;
-};
-
-$(function() {
-	//initialize table with no records
-	initTable();
-	$(".no-records-found td").html('No records to display');
-
-	$('#category_form').submit(function(e) {
-		e.preventDefault();
-		loadTable();
->>>>>>> 4526b0a7577123c884067c5bf7c9b93ae5e94001
 	});
 </script>
 {% endblock jscontent %}
