@@ -45,30 +45,6 @@
 sidePagination='server' data-show-refresh="true"
 data-smart-display="true">
   </table>
-
-
-
-	<!-- Float Buttons -->
-	<!-- <div class="float-link-div">
-		<a class="float-link float-link-gap" href="{% url 'populate' %}">Populate</a>
-		<a class="float-link" href="{% url 'app_config' %}">Edit Config</a>
-	</div> -->
-
-	<!-- Table -->
-	<!-- <div>
-		<table id="table" data-cache="false" data-pagination="true" data-page-size="25"
-		data-search="true" data-show-toggle="true" data-buttons-align="left" data-height="60%"
-		data-classes= "table table-striped table-bordered table-hover"
-		style="background-color: #f8f9faed;">
-		</table>
-	</div> -->
-
-	<!-- Multiselect Dropdown Root Path Menu -->
-	<!-- <select id="rootDropdown" multiple>
-			{% for rootPath in rootPaths %}
-				<option value="{{ rootPath }}">{{ rootPath|safe }}</option>
-			{% endfor %}
-	</select> -->
 {% endblock content %}
 
 {% block jscontent %}
@@ -145,13 +121,6 @@ function notSelectedOptions() {
 };
 
 $(function() {
-	// $('#rootDropdown').multiselect({
-	// 	includeSelectAllOption: true,
-	// 	disableIfEmpty: true,
-	// 	nonSelectedText: 'Select root path(s)',
-	// 	numberDisplayed: 1
-	// });
-
 	//initialize table with no records
 	initTable();
 	$(".no-records-found td").html('No records to display');
