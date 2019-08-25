@@ -14,14 +14,18 @@ def delFromEs(oldDocCount):
 	printOnTerminal("app_search/esFunctions", str(oldDocCount) + " old documents deleted")
 
 def addToEs(files):
-	oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
-	delFromEs(oldDocCount)
-	printOnTerminal("app_search/esFunctions", "adding documents to garmin_index")
-	newDocCount = 0
-	for file in files:
-		es.index(index="garmin_index", doc_type="files", id=file['id'], body=file)
-		newDocCount+=1
-	printOnTerminal("app_search/esFunctions", str(newDocCount) + " documents added to garmin_index")
+	try:
+		oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
+		delFromEs(oldDocCount)
+	except:
+		printOnTerminal("app_search/esFunctions", "garmin_index not found")
+	finally:
+		printOnTerminal("app_search/esFunctions", "adding documents to garmin_index")
+		newDocCount = 0
+		for file in files:
+			es.index(index="garmin_index", doc_type="files", id=file['id'], body=file)
+			newDocCount+=1
+		printOnTerminal("app_search/esFunctions", str(newDocCount) + " documents added to garmin_index")
 
 def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2=None):
 	# helper functions

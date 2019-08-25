@@ -125,9 +125,9 @@ function loadTable() {
 function linkFormatter(value, row) {
 	var argu = $search1.val();
 	if (argu != "")
-		return "<a href='/view/" + row.id + "/" + argu + "/'>" + value + "</a>";
+		return "<a href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
 	else
-		return "<a href='/view/" + row.id + "/'>" + value + "</a>";
+		return "<a href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
 };
 
 function notSelectedOptions() {
