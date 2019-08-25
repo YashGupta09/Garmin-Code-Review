@@ -63,7 +63,8 @@ function initTable() {
 			title: 'File Id'
 		}, {
 			field: 'root',
-			title: 'Path'
+			title: 'Path',
+			formatter: 'pathCopyFormatter'
 		}, {
 			field: 'fileName',
 			title: 'File Name',
@@ -90,7 +91,6 @@ function loadTable() {
 		async: false
 	}).responseText);
 
-
 	//toggle show/hide highlight column depending on arguments of 2nd input
 	if ($search1.val() != "")
 		$table.bootstrapTable('showColumn', 'highlight');
@@ -99,6 +99,10 @@ function loadTable() {
 
 	$table.bootstrapTable('load', _data);
 };
+
+function pathCopyFormatter(value, row) {
+	return "<span id='" + row.id + "'>" + value + "<button onclick='copyPath(" + row.id + ")'>Copy text</button></span>"
+}
 
 function linkFormatter(value, row) {
 	var argu = $search1.val();
