@@ -410,3 +410,10 @@ select {
     display: none;
   }
 }
+
+pre{
+  margin : 0px !important;
+}
+td{
+  padding: 1px 5px !important;
+}
