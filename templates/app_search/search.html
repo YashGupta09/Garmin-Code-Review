@@ -88,11 +88,12 @@ function initTable() {
 	$table.bootstrapTable({
 		columns: [{
 			field: 'id',
-			title: 'File Id'
+			title: 'File Id',
+			align: 'center'
 		}, {
 			field: 'root',
 			title: 'Path',
-			formatter: 'pathCopyFormatter'
+			formatter: 'pathFormatter'
 		}, {
 			field: 'fileName',
 			title: 'File Name',
@@ -101,6 +102,10 @@ function initTable() {
 			field: 'highlight',
 			title: 'Highlight',
 			formatter: 'linkFormatter'
+		}, {
+			title: 'Copy Path & File Name',
+			formatter: 'pathCopyFormatter',
+			align: 'center'
 		}]
 	});
 };
@@ -128,16 +133,29 @@ function loadTable() {
 	$table.bootstrapTable('load', _data);
 };
 
+function copyPath(id) {
+	var aux = document.createElement("input");
+	aux.setAttribute("value", document.getElementById("path"+id).innerHTML + "\\" + document.getElementById("fileName"+id).innerHTML);
+	document.body.appendChild(aux);
+	aux.select();
+	document.execCommand("copy");
+	document.body.removeChild(aux);
+}
+
+function pathFormatter(value, row) {
+	return "<span id='path" + row.id + "'>" + value + "</span>"
+}
+
 function pathCopyFormatter(value, row) {
-	return "<span id='" + row.id + "'>" + value + "<button onclick='copyPath(" + row.id + ")'>Copy text</button></span>"
+	return "<button onclick='copyPath(" + row.id + ")'><i class='far fa-copy'></i></button>"
 }
 
 function linkFormatter(value, row) {
 	var argu = $search1.val();
 	if (argu != "")
-		return "<a href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
+		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
 	else
-		return "<a href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
+		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
 };
 
 function notSelectedOptions() {
