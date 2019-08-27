@@ -97,15 +97,15 @@ function initTable() {
 		}, {
 			field: 'fileName',
 			title: 'File Name',
-			formatter: 'linkFormatter'
-		}, {
-			field: 'highlight',
-			title: 'Highlight',
-			formatter: 'linkFormatter'
+			formatter: 'fileNameFormatter'
 		}, {
 			title: 'Copy Path & File Name',
 			formatter: 'pathCopyFormatter',
 			align: 'center'
+		}, {
+			field: 'highlight',
+			title: 'Highlight',
+			formatter: 'highlightFormatter'
 		}]
 	});
 };
@@ -150,12 +150,20 @@ function pathCopyFormatter(value, row) {
 	return "<button onclick='copyPath(" + row.id + ")'><i class='far fa-copy'></i></button>"
 }
 
-function linkFormatter(value, row) {
+function fileNameFormatter(value, row) {
 	var argu = $search1.val();
 	if (argu != "")
 		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
 	else
 		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
+};
+
+function highlightFormatter(value, row) {
+	var argu = $search1.val();
+	highlightString = "";
+	value.forEach(highlight => 
+		highlightString = highlightString.concat("<a id='fileName" + row.id + "' href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + highlight + "</a><br>"))
+	return highlightString;
 };
 
 function notSelectedOptions() {

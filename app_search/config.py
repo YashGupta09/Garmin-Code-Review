@@ -1,3 +1,4 @@
-paths = [r"/Users/gtyagi2/Desktop/GT/garmin/Garmin-Code-Review"]
+paths = [r"C:\Users\gupta\OneDrive\Desktop\calculator-master"]
+#paths = [r"C:\Users\gupta\OneDrive\Desktop\Garmin\My Code"]
 
-ext = [".py", ".html", ".txt", ".java"]
+ext = [".py", ".html", ".txt", ".cpp", ".h"]

@@ -28,7 +28,7 @@ def convergeDict(files):
 			for inList in outList:
 				fileTuple[0]['highlight'].append(inList)
 		newFiles.append(fileTuple[0])
-	printOnTerminal("app_search/views", "Number of files in search result is " + str(len(files)))
+	printOnTerminal("app_search/views", str(len(files)) +	 " in resultList")
 	return newFiles
 
 # Create your views here
@@ -86,7 +86,6 @@ def view_file_argu(request, doc_id, arguString):
 				break
 		if not highlightFlag: content.append({'lineNum': i, 'lineContent': line})
 		else: continue
-	print(fileFullPath)	
 	return render(request, 'app_search/view_file.html', {'title': 'Garmin File Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})
 
 def view_file(request, doc_id):
@@ -99,5 +98,4 @@ def view_file(request, doc_id):
 	for line in contentList:
 		i += 1
 		content.append({'lineNum': i, 'lineContent': line})
-	print(content)	
 	return render(request, 'app_search/view_file.html', {'title': 'Garmin FIle Search - ' + search_result['fileName'], 'fullFilePath': fileFullPath , 'content': content})

@@ -31,14 +31,13 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 	# helper functions
 	def buildRootQuery():
 		pathCount = 0
-		n = len(notRootPaths)
 		if not notRootPaths:
 			query = '{"query": {"bool": {"must_not": []'
 		else:
 			query = '{"query": {"bool": {"must_not": ['
 			for path in notRootPaths:
 				pathCount += 1
-				if pathCount != n:
+				if pathCount != len(notRootPaths):
 					query += '{"range": {"id": {"gte": ' + str(root_data[path][0]) + ', "lte": ' + str(root_data[path][1]) + '}}}, '
 				else:
 					query += '{"range": {"id": {"gte": ' + str(root_data[path][0]) + ', "lte": ' + str(root_data[path][1]) + '}}}]'
@@ -47,11 +46,10 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 	def buildContentQuery(query, arguString):
 		argus = arguString.split(' ')
 		arguCount = 0
-		n = len(argus)
 		query += ', "should": ['
 		for argu in argus:
 			arguCount += 1
-			if arguCount != n:
+			if arguCount != len(argus):
 				query += '{"regexp": {"content": ".*' + argu + '.*"}}, '
 			else:
 				query += '{"regexp": {"content": ".*' + argu + '.*"}}]'
@@ -78,10 +76,13 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 		contentFlag = True
 	printOnTerminal("esFunctions", "ES Query > " + query)
 	search_result = es.search(index="garmin_index", size=10000, body=query)
+	printOnTerminal("esFunctions", str(len(search_result['hits']['hits'])) + " results found")
 	# retrieve data and return it
 	if contentFlag:
 		for hits in search_result['hits']['hits']:
-			resultList.append((hits['_source'], hits['highlight']))
+			try:
+				resultList.append((hits['_source'], hits['highlight']))
+			except: continue
 	else:
 		for hits in search_result['hits']['hits']:
 			resultList.append(hits['_source'])

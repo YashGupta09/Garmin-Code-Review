@@ -33,9 +33,7 @@ def populate():
         #actual populate function starts here
         for root, directories, files in os.walk(rootPath):
             for file in files:
-                #fileComp stores the components of file, ie, filename and extention
-                fileComp = os.path.splitext(file)
-                if fileComp[1] in ext:
+                if os.path.splitext(file)[1] in ext:
                     filePath = root + '/' + file
                     with open(filePath, mode='r', encoding='utf8') as f:
                         content = DjangoFile(f).read()
