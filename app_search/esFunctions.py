@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import bulk
 from .rootData import root_data
 from .populate import printOnTerminal
 import requests
@@ -8,27 +9,48 @@ es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 response = requests.get('http://localhost:9200')
 
 def delFromEs(oldDocCount):
+	# generator function
+	def genDelData(count):
+		for i in range(count):
+			yield {
+				"_op_type": "delete",
+				"_index": "garmin_index",
+				"_type": "files",
+				"_id": i+1
+			}
+
 	printOnTerminal("app_search/esFunctions", "deleting old documents from garmin_index")
-	for i in range(oldDocCount):
-		es.delete(index="garmin_index", doc_type="files", id=(i+1))
+	bulk(es, genDelData(oldDocCount))
 	printOnTerminal("app_search/esFunctions", str(oldDocCount) + " old documents deleted")
 
 def addToEs(files):
+	# generator function
+	def genAddData(files):
+		for file in files:
+			yield {
+				"_index": "garmin_index",
+				"_type": "files",
+				"_id": file["id"],
+				"_source": {
+					"id": file["id"],
+					"root": file["root"],
+					"fileName": file["fileName"],
+					"content": file["content"]
+				}
+			}
+
 	try:
-		oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]
+		oldDocCount = es.search(index="garmin_index", size=10000, body={})["hits"]["total"]["value"]	
 		delFromEs(oldDocCount)
 	except:
 		printOnTerminal("app_search/esFunctions", "garmin_index not found")
 	finally:
 		printOnTerminal("app_search/esFunctions", "adding documents to garmin_index")
-		newDocCount = 0
-		for file in files:
-			es.index(index="garmin_index", doc_type="files", id=file['id'], body=file)
-			newDocCount+=1
-		printOnTerminal("app_search/esFunctions", str(newDocCount) + " documents added to garmin_index")
+		bulk(es, genAddData(files))
+		printOnTerminal("app_search/esFunctions", str(len(files)) + " documents added to garmin_index")
 
 def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2=None):
-	# helper functions
+	# helper function
 	def buildRootQuery():
 		pathCount = 0
 		if not notRootPaths:
@@ -43,6 +65,7 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 					query += '{"range": {"id": {"gte": ' + str(root_data[path][0]) + ', "lte": ' + str(root_data[path][1]) + '}}}]'
 		return query
 	
+	# helper function
 	def buildContentQuery(query, arguString):
 		argus = arguString.split(' ')
 		arguCount = 0
@@ -74,9 +97,9 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 		query = buildContentQuery(query, value2)
 		query += ', "must": {"regexp": {"' + attribute1 + '": "' + value1 + '"}}}}, "highlight": {"fields": {"content": {}}}}'
 		contentFlag = True
-	printOnTerminal("esFunctions", "ES Query > " + query)
+	printOnTerminal("app_search/esFunctions", "ES Query > " + query)
 	search_result = es.search(index="garmin_index", size=10000, body=query)
-	printOnTerminal("esFunctions", str(len(search_result['hits']['hits'])) + " results found")
+	printOnTerminal("app_search/esFunctions", str(len(search_result['hits']['hits'])) + " results found")
 	# retrieve data and return it
 	if contentFlag:
 		for hits in search_result['hits']['hits']:
