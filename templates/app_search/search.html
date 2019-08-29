@@ -37,6 +37,7 @@
 							<i class="fas fa-search fa-2x"></i>
 					</button>
 				</div>
+				<i id="loader" class="fas fa-spinner spinner" style="display:none"></i>
 				<div class="col-sm"></div>
 			</div>
 
@@ -45,9 +46,11 @@
 
 </div>
 
+<div id="divtable">
 <table id="table" data-toggle="table" data-search="true" sidePagination='server'
 	data-show-refresh="true" data-smart-display="true" style="background: #f8f9fa">
 </table>
+</div>
 
 
 
@@ -83,7 +86,7 @@ var $table = $('#table');
 var $search = $('#search');
 var $search1 = $('#search1');
 var $rootDropdown = $('#rootDropdown');
-console.log($search1)
+
 function initTable() {
 	$table.bootstrapTable({
 		columns: [{
@@ -98,18 +101,20 @@ function initTable() {
 			field: 'fileName',
 			title: 'File Name',
 			formatter: 'fileNameFormatter'
-		}, {
-			title: 'Copy Path & File Name',
-			formatter: 'pathCopyFormatter',
-			align: 'center'
-		}, {
+		},  {
 			field: 'highlight',
 			title: 'Highlight',
 			formatter: 'highlightFormatter'
+		},	{
+			title: 'Copy Path & File Name',
+			formatter: 'pathCopyFormatter',
+			align: 'center'
 		}]
 	});
-};
-initTable()
+}
+
+initTable();
+
 function loadTable() {
 	var notRootPaths = notSelectedOptions();
 	var _data = JSON.parse($.ajax({
@@ -129,9 +134,9 @@ function loadTable() {
 		$table.bootstrapTable('showColumn', 'highlight');
 	else
 		$table.bootstrapTable('hideColumn', 'highlight');
-
+	$table.bootstrapTable('refresh')
 	$table.bootstrapTable('load', _data);
-};
+}
 
 function copyPath(id) {
 	var aux = document.createElement("input");
@@ -156,7 +161,7 @@ function fileNameFormatter(value, row) {
 		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + value + "</a>";
 	else
 		return "<a id='fileName" + row.id + "' href='/view/" + row.id + "/' target='_blank'>" + value + "</a>";
-};
+}
 
 function highlightFormatter(value, row) {
 	var argu = $search1.val();
@@ -164,32 +169,24 @@ function highlightFormatter(value, row) {
 	value.forEach(highlight => 
 		highlightString = highlightString.concat("<a id='fileName" + row.id + "' href='/view/" + row.id + "/" + argu + "/' target='_blank'>" + highlight + "</a><br>"))
 	return highlightString;
-};
+}
 
 function notSelectedOptions() {
 	var notRootPaths = new Array();
 	var selectedRootPaths = $rootDropdown.val();
 	if (!selectedRootPaths.length)
 		return notRootPaths;
-	};
+}
 
-	$(function () {
-		// $('#rootDropdown').multiselect({
-		// 	includeSelectAllOption: true,
-		// 	disableIfEmpty: true,
-		// 	nonSelectedText: 'Select root path(s)',
-		// 	numberDisplayed: 1
-		// });
+$(function () {
+	//initialize table with no records
+	$(".no-records-found td").html('No records to display');
 
-		//initialize table with no records
-		initTable();
-		$(".no-records-found td").html('No records to display');
-
-		$('#category_form').submit(function (e) {
-			e.preventDefault();
-			loadTable();
-		});
-
+	$('#category_form').submit(function (event) {
+		event.preventDefault();
+		loadTable();
 	});
+
+});
 </script>
 {% endblock jscontent %}

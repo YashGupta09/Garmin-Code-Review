@@ -50,9 +50,9 @@ def mySearch(notRootPaths, attribute1=None, value1=None, attribute2=None, value2
 		for argu in argus:
 			arguCount += 1
 			if arguCount != len(argus):
-				query += '{"regexp": {"content": ".*' + argu + '.*"}}, '
+				query += '{"regexp": {"content": ".*' + argu.lower() + '.*"}}, '
 			else:
-				query += '{"regexp": {"content": ".*' + argu + '.*"}}]'
+				query += '{"regexp": {"content": ".*' + argu.lower() + '.*"}}]'
 		return query
 
 	# mySearch() body begins here

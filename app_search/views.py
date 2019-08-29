@@ -45,7 +45,7 @@ def api(request):
 	fileName = request.GET.get('fileName')
 	content = request.GET.get('content')
 	notRootPaths = request.GET.getlist('notRootPaths[]')
-	fileNameRegEx = ".*" + fileName + ".*"
+	fileNameRegEx = ".*" + fileName.lower() + ".*"
 	contentFlag = False
 
 	if fileName:
@@ -62,6 +62,11 @@ def api(request):
 
 	if contentFlag:
 		files = convergeDict(files)
+
+	for file in files:
+		if "highlight" not in file:
+			file['highlight'] = ['']
+	
 	return JsonResponse(files, safe=False)
 
 def view_file_argu(request, doc_id, arguString):

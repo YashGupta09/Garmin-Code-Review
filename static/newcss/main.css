@@ -109,6 +109,29 @@ span {
   background-color: #f8f9faad;
 }
 
+.spinner {
+  transform: rotate(360deg);
+  animation: spin 1.0s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loader {
+  font-size: 150%;
+}
+
+.load {
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+
+.no-records-found td{
+  text-align: center;
+}
 
 .modalDialog {
   position: fixed;
