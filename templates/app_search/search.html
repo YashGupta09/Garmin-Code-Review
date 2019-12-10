@@ -28,13 +28,13 @@
 
 				{% for field in form %}
 				<div class="col-sm" >
-						{{ field }}
+					{{ field }}
 				</div>
 				{% endfor %}
 
 				<div class="col-sm">
 					<button type="Submit" class="btn">
-							<i class="fas fa-search fa-2x"></i>
+						<i class="fas fa-search fa-2x"></i>
 					</button>
 				</div>
 				<i id="loader" class="fas fa-spinner spinner" style="display:none"></i>
@@ -43,8 +43,19 @@
 
 		</form>
 	</div>
-
 </div>
+
+<!-- <div class="modal fade" id="loadModal" tabindex="-1" role="dialog">
+	<div class="modal-dialogue modal-dialogue-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="modal-body">
+					Loading...
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->
 
 <div id="divtable">
 <table id="table" data-toggle="table" data-search="true" sidePagination='server'
@@ -181,8 +192,12 @@ $(function () {
 	$(".no-records-found td").html('No records to display');
 
 	$('#category_form').submit(function (event) {
-		event.preventDefault();
+		//$('#loader').show();
+		//$('#loadModal').modal("show");
 		loadTable();
+		//$('#loader').hide();
+		//$('#loadModal').modal("hide");
+		return false;
 	});
 });
 </script>
